@@ -1,0 +1,49 @@
+Mindfulness-Wellness/
+├── index.html
+├── style.css
+├── app.js
+├── language_strings.js
+├── page_content.js
+├── sw.js
+├── manifest.json
+├── offline.html
+│
+├── images/
+│   ├── logo.png
+│   ├── icon-192x192.png
+│   ├── icon-512x512.png
+│   ├── icon-students.png
+│   ├── icon-teachers.png
+│   ├── icon-resources.png
+│   ├── hero-background.jpg
+│   ├── mind_puppy_icon.png
+│   ├── shake_freeze_icon.png
+│   ├── amazing_brain_icon.png
+│   ├── coloring_mandala.png
+│   ├── coloring_nature.png
+│   ├── icon_parents.png         // (Create if you intend to use this specific icon)
+│   ├── icon_school_pathways.png // (Create if you intend to use this specific icon)
+│   └── icon_research.png        // (Create if you intend to use this specific icon)
+│
+├── audio/
+│   ├── quick_calm_1min.mp3
+│   ├── mindful_breathing_3min.mp3
+│   ├── mindful_breathing_5min.mp3
+│   ├── body_scan_10min.mp3
+│   ├── mindful_listening_sounds_3min.mp3
+│   ├── thoughts_as_clouds_5min.mp3
+│   ├── stop_practice_2min.mp3
+│   ├── loving_kindness_5min.mp3
+│   └── gratitude_reflection_4min.mp3
+│
+└── pdfs/
+    ├── What_Is_Mindfulness_BrainPower.pdf
+    ├── MiSP_MfCP_Overview_BrainPower.pdf
+    ├── BrainPower_MW_Vision.pdf
+    ├── Mindful_Minutes_Guide_ES.pdf
+    ├── Mindful_Minutes_Guide_JHS.pdf
+    ├── Adult_MW_Foundations_Overview.pdf
+    ├── Tips_for_Teaching_Mindfulness.pdf
+    ├── coloring_mandala_printable.pdf
+    ├── coloring_nature_printable.pdf
+    └── Mindful_Me_Curriculum_Overview_BrainPower.pdf
