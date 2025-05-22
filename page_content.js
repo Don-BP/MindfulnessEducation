@@ -432,10 +432,12 @@ const pages = {
             </div>
         </section>
     `,
-     researchEvidence: `
+    researchEvidence: `
         <section id="research-evidence-page" class="page-content research-evidence-page">
             <h2 data-lang-key="researchEvidenceTitle"></h2>
             <p data-lang-key="researchIntroP1"></p>
+            <p data-lang-key="researchIntroP2"></p>
+            
             <div class="content-section">
                 <h3 data-lang-key="researchStudentBenefitsTitle"></h3>
                 <ul>
@@ -444,8 +446,10 @@ const pages = {
                     <li data-lang-key="researchStudentLi3"></li>
                     <li data-lang-key="researchStudentLi4"></li>
                     <li data-lang-key="researchStudentLi5"></li>
+                    <li data-lang-key="researchStudentLi6"></li>
                 </ul>
             </div>
+            
             <div class="content-section">
                 <h3 data-lang-key="researchTeacherBenefitsTitle"></h3>
                 <ul>
@@ -455,13 +459,35 @@ const pages = {
                     <li data-lang-key="researchTeacherLi4"></li>
                 </ul>
             </div>
+
+            <div class="content-section">
+                <h3 data-lang-key="researchImplementationTitle"></h3>
+                <p data-lang-key="researchImplementationP1"></p>
+                <ul>
+                    <li data-lang-key="researchImplementationLi1"></li>
+                    <li data-lang-key="researchImplementationLi2"></li>
+                    <li data-lang-key="researchImplementationLi3"></li>
+                    <li data-lang-key="researchImplementationLi4"></li>
+                </ul>
+            </div>
+            
             <div class="content-section">
                 <h3 data-lang-key="researchJapanContextTitle"></h3>
                 <p data-lang-key="researchJapanP1"></p>
             </div>
+            
             <div class="content-section">
                 <p data-lang-key="researchMispMyriad"></p>
                 <p data-lang-key="researchBrainPowerApproach"></p>
+            </div>
+
+            <div class="content-section">
+                <h3 data-lang-key="researchFurtherReadingTitle"></h3>
+                <ul>
+                    <li data-lang-key="researchMiSPSiteLink"></li>
+                    <li data-lang-key="researchMfCPSiteLink"></li>
+                    <li data-lang-key="researchEIFLink"></li>
+                </ul>
             </div>
         </section>
     `,
