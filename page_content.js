@@ -1,5 +1,5 @@
 // --- page_content.js ---
-const pages = { 
+const pages = {
     home: `
         <section id="home-page" class="page-content active">
             <div class="hero-section">
@@ -50,6 +50,7 @@ const pages = {
     practices: `
         <section id="practices-page" class="page-content">
             <h2 data-lang-key="practicesTitle"></h2>
+            <p data-lang-key="adultCurriculumDescFull" style="text-align:center; margin-bottom:1.5em;"></p>
             <div id="practice-list-container"></div>
         </section>
     `,
@@ -57,6 +58,7 @@ const pages = {
         <section id="student-zone-page" class="page-content student-engagement-page">
             <h2 data-lang-key="studentZoneTitle"></h2>
             <p data-lang-key="studentZoneDesc"></p>
+            
             <div class="engagement-section">
                 <h3 data-lang-key="mindPuppyTitle"></h3>
                 <img src="images/mind_puppy_icon.png" alt="Mind Puppy icon" style="max-width:100px; margin: 0 auto 1em auto; display:block;">
@@ -72,6 +74,21 @@ const pages = {
                 <h3 data-lang-key="amazingBrainTitle"></h3>
                  <img src="images/amazing_brain_icon.png" alt="Brain icon" style="max-width:100px; margin: 0 auto 1em auto; display:block;">
                 <p data-lang-key="amazingBrainDesc"></p>
+            </div>
+            <div class="engagement-section">
+                <h3 data-lang-key="fingerBreathingTitle"></h3>
+                <p data-lang-key="fingerBreathingDesc"></p>
+                 <!-- You could add a small illustrative icon/image here if desired -->
+            </div>
+            <div class="engagement-section">
+                <h3 data-lang-key="noticingThoughtsTitle"></h3>
+                <p data-lang-key="noticingThoughtsDesc"></p>
+                 <button class="general-app-button" onclick="window.navigateToPractice('audio-thoughts-clouds-5min')" data-lang-key="practiceObservingThoughts5MinText" style="margin: 0.5em auto; display:block;"></button> 
+            </div>
+            <div class="engagement-section">
+                <h3 data-lang-key="kindnessWishTitle"></h3>
+                <p data-lang-key="kindnessWishDesc"></p>
+                 <button class="general-app-button" onclick="window.navigateToPractice('audio-kindness-5min')" data-lang-key="practiceKindness5MinText" style="margin: 0.5em auto; display:block;"></button> 
             </div>
             <div class="engagement-section">
                 <h3 data-lang-key="mindfulWalkingTitle"></h3>
@@ -99,7 +116,7 @@ const pages = {
             <div class="engagement-section" id="gratitude-journal-section">
                 <h3 data-lang-key="gratitudeJournalTitle"></h3>
                 <p data-lang-key="gratitudeJournalDesc"></p>
-                <textarea id="gratitude-input" data-lang-key="gratitudePlaceholder"></textarea>
+                <textarea id="gratitude-input" data-lang-key="gratitudePlaceholder" placeholder="Today I am grateful for..."></textarea>
                 <button id="add-gratitude-btn" class="general-app-button" data-lang-key="addGratitudeBtn"></button>
                 <h4 data-lang-key="myGratitudeListTitle"></h4>
                 <ul id="gratitude-list"></ul>
@@ -147,7 +164,7 @@ const pages = {
                 <p><strong data-lang-key="esDay5"></strong>: <span data-lang-key="esWeek4D5"></span></p>
                 <p><strong>Related Practice:</strong> <a href="#" onclick="window.navigateToPractice('audio-kindness-5min'); return false;" data-lang-key="practiceKindness5MinText"></a></p>
             </div>
-            <div class="curriculum-module">
+             <div class="curriculum-module">
                 <h3 data-lang-key="esWeek5Title"></h3>
                 <p><strong data-lang-key="esDay1"></strong>: <span data-lang-key="esWeek5D1"></span></p>
                 <p><strong data-lang-key="esDay2"></strong>: <span data-lang-key="esWeek5D2"></span></p>
@@ -264,10 +281,10 @@ const pages = {
             <div class="curriculum-module"><h3 data-lang-key="adultModule1Title"></h3><p data-lang-key="adultModule1Desc"></p><p><strong>Key Practice:</strong> <a href="#" onclick="window.navigateToPractice('audio-breathing-5min'); return false;" data-lang-key="practiceBreathing5MinText"></a></p></div>
             <div class="curriculum-module"><h3 data-lang-key="adultModule2Title"></h3><p data-lang-key="adultModule2Desc"></p><p><strong>Key Practice:</strong> <a href="#" onclick="window.navigateToPractice('audio-body-scan-10min'); return false;" data-lang-key="practiceBodyScan10MinText"></a></p></div>
             <div class="curriculum-module"><h3 data-lang-key="adultModule3Title"></h3><p data-lang-key="adultModule3Desc"></p><p><strong>Key Practice:</strong> <a href="#" onclick="window.navigateToPractice('audio-thoughts-clouds-5min'); return false;" data-lang-key="practiceObservingThoughts5MinText"></a></p></div>
-            <div class="curriculum-module"><h3 data-lang-key="adultModule4Title"></h3><p data-lang-key="adultModule4Desc"></p><p><strong>Key Practice:</strong> <a href="#" onclick="window.navigateToPractice('audio-stop-practice-2min'); return false;" data-lang-key="practiceStop2MinText"></a></p></div>
-            <div class="curriculum-module"><h3 data-lang-key="adultModule5Title"></h3><p data-lang-key="adultModule5Desc"></p><p><strong>Key Practice:</strong> <a href="#" onclick="window.navigateToPractice('audio-breathing-3min'); return false;" data-lang-key="practiceBreathing3MinText"></a></p></div>
+            <div class="curriculum-module"><h3 data-lang-key="adultModule4Title"></h3><p data-lang-key="adultModule4Desc"></p><p><strong>Key Practice:</strong> <a href="#" onclick="window.navigateToPractice('audio-rain-practice'); return false;" data-lang-key="rainPracticeTitle"></a></p></div>
+            <div class="curriculum-module"><h3 data-lang-key="adultModule5Title"></h3><p data-lang-key="adultModule5Desc"></p><p><strong>Key Practice:</strong> <a href="#" onclick="window.navigateToPractice('audio-3step-breathing-space'); return false;" data-lang-key="threeStepBreathingSpaceTitle"></a></p></div>
             <div class="curriculum-module"><h3 data-lang-key="adultModule6Title"></h3><p data-lang-key="adultModule6Desc"></p><p><strong>Key Practice:</strong> <a href="#" onclick="window.navigateToPractice('audio-kindness-5min'); return false;" data-lang-key="practiceKindness5MinText"></a></p></div>
-            <div class="curriculum-module"><h3 data-lang-key="adultModule7Title"></h3><p data-lang-key="adultModule7Desc"></p></div>
+            <div class="curriculum-module"><h3 data-lang-key="adultModule7Title"></h3><p data-lang-key="adultModule7Desc"></p><p><strong>Practice:</strong> <em>Guided dyad listening (text/instructions in session)</em></p></div>
             <div class="curriculum-module"><h3 data-lang-key="adultModule8Title"></h3><p data-lang-key="adultModule8Desc"></p><p><strong>Key Practice:</strong> <a href="#" onclick="window.navigateToPractice('audio-gratitude-4min'); return false;" data-lang-key="practiceGratitude4MinText"></a></p></div>
         </section>
     `,
@@ -291,9 +308,9 @@ const pages = {
             <div class="content-section">
                 <h3 data-lang-key="parentsSimplePracticesTitle"></h3>
                 <p data-lang-key="parentsSimplePracticesIntro"></p>
-                <p><strong data-lang-key="practiceMindfulMinuteTitle"></strong>: <span data-lang-key="practiceMindfulMinuteDesc"></span></p>
-                <p><strong data-lang-key="practiceMindfulListeningTitle"></strong>: <span data-lang-key="practiceMindfulListeningDesc"></span></p>
-                <p><strong data-lang-key="practiceGratitudeSharingTitle"></strong>: <span data-lang-key="practiceGratitudeSharingDesc"></span></p>
+                <p><strong><a href="#" onclick="window.navigateToPractice('audio-quick-calm-list'); return false;" data-lang-key="practiceMindfulMinuteTitle"></a></strong>: <span data-lang-key="practiceMindfulMinuteDesc"></span></p>
+                <p><strong><a href="#" onclick="window.navigateToPractice('audio-listening-sounds-3min'); return false;" data-lang-key="practiceMindfulListeningTitle"></a></strong>: <span data-lang-key="practiceMindfulListeningDesc"></span></p>
+                <p><strong><a href="#" onclick="window.navigateToPractice('audio-gratitude-4min'); return false;" data-lang-key="practiceGratitudeSharingTitle"></a></strong>: <span data-lang-key="practiceGratitudeSharingDesc"></span></p>
                 <p><strong data-lang-key="practiceMindfulEatingTitle"></strong>: <span data-lang-key="practiceMindfulEatingDesc"></span></p>
             </div>
             
@@ -342,6 +359,13 @@ const pages = {
             </div>
             <div class="content-section">
                  <p data-lang-key="pathwayMiSPLink"></p>
+            </div>
+             <div class="faq-section">
+                <h3>Frequently Asked Questions (FAQs)</h3>
+                <div class="faq-item"><h3 class="faq-question" data-lang-key="faqPathwaysCostTitle"></h3><div class="faq-answer"><p data-lang-key="faqPathwaysCostAnswer"></p></div></div>
+                <div class="faq-item"><h3 class="faq-question" data-lang-key="faqPathwaysBenefitsTitle"></h3><div class="faq-answer"><p data-lang-key="faqPathwaysBenefitsAnswer"></p></div></div>
+                <div class="faq-item"><h3 class="faq-question" data-lang-key="faqPathwaysSameWayTitle"></h3><div class="faq-answer"><p data-lang-key="faqPathwaysSameWayAnswer"></p></div></div>
+                <div class="faq-item"><h3 class="faq-question" data-lang-key="faqPathwaysInSchoolTitle"></h3><div class="faq-answer"><p data-lang-key="faqPathwaysInSchoolAnswer"></p></div></div>
             </div>
         </section>
     `,
@@ -408,7 +432,7 @@ const pages = {
                     <li><a href="pdfs/Mindful_Minutes_Guide_JHS.pdf" target="_blank" download>Mindful Minutes Guide - Junior High School (JHS)</a></li>
                     <li><a href="pdfs/Adult_MW_Foundations_Overview.pdf" target="_blank" download>Adult MW Foundations - Course Overview</a></li>
                     <li><a href="pdfs/Tips_for_Teaching_Mindfulness.pdf" target="_blank" download>Tips for Teaching Mindfulness in the Classroom</a></li>
-                    <li><a href="pdfs/Mindful_Me_Curriculum_Overview_BrainPower.pdf" target="_blank" download>Mindful Me - 8 Lesson Curriculum Overview</a></li> 
+                    <li><a href="pdfs/Mindful_Me_Curriculum_Overview_BrainPower.pdf" target="_blank" download>Mindful Me - 8 Lesson Curriculum Overview</a></li>
                 </ul>
             </div>
             <div class="resource-section">

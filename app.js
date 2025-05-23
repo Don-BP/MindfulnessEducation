@@ -13,9 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentLanguage = localStorage.getItem('brainPowerMWLang') || (navigator.language.startsWith('ja') ? 'ja' : 'en');
     const languageToggleBtn = document.getElementById('language-toggle-btn');
 
-    // --- Hamburger Menu Elements ---
-    const hamburgerMenuButton = document.getElementById('hamburger-btn'); 
-    const mainNavElement = document.getElementById('main-nav'); 
+    const hamburgerMenuButton = document.getElementById('hamburger-btn');
+    const mainNavElement = document.getElementById('main-nav');
     const navButtons = mainNavElement ? mainNavElement.querySelectorAll('button[data-page]') : [];
 
     if (hamburgerMenuButton && mainNavElement) {
@@ -34,11 +33,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         navButtons.forEach(button => {
-            button.addEventListener('click', () => { 
+            button.addEventListener('click', () => {
                 if (mainNavElement.classList.contains('nav-open')) {
                     mainNavElement.classList.remove('nav-open');
                     const icon = hamburgerMenuButton.querySelector('i');
-                    if (icon) { // Check if icon exists
+                    if (icon) {
                         icon.classList.remove('fa-times');
                         icon.classList.add('fa-bars');
                     }
@@ -49,13 +48,11 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         console.error("Hamburger button (#hamburger-btn) or main navigation (#main-nav) not found. Check HTML IDs.");
     }
-    // --- End Mobile Navigation Toggle ---
 
     if (currentYearSpan) {
         currentYearSpan.textContent = new Date().getFullYear();
     }
 
-    // --- HELPER FUNCTIONS ---
     function formatTime(totalSeconds) {
         if (isNaN(totalSeconds) || totalSeconds < 0) return "0:00";
         const minutes = Math.floor(totalSeconds / 60);
@@ -82,34 +79,39 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     }
-    
+
     window.loadColoringImage = (imageSrc) => {
         const container = document.getElementById('coloring-image-container');
         if (container) {
-            container.innerHTML = `<img src="${imageSrc}" alt="Coloring Page Preview" style="max-width:100%; height:auto; border-radius: 8px;">`;
+            container.innerHTML = `<img src="${imageSrc}" alt="Coloring Page Preview">`;
         }
     };
-    // --- END OF HELPER FUNCTIONS ---
 
-    // langStrings and pages are now expected to be globally defined by language_strings.js and page_content.js
-
-    // --- Practice Data (audio file mappings) ---
-    const practiceData = [ 
+    // langStrings and pages are globally defined by language_strings.js and page_content.js
+    const practiceData = [
         {
             categoryKey: "coreMindfulnessCategory",
             tracks: [
                 { id: "audio-quick-calm-list", titleKey: "quickCalmTitle", descriptionKey: "quickCalmDesc", src: "audio/quick_calm_1min.mp3" },
                 { id: "audio-breathing-3min", titleKey: "breathing3MinTitle", descriptionKey: "breathing3MinDesc", src: "audio/mindful_breathing_3min.mp3" },
                 { id: "audio-breathing-5min", titleKey: "breathing5MinTitle", descriptionKey: "breathing5MinDesc", src: "audio/mindful_breathing_5min.mp3" },
-                { id: "audio-body-scan-10min", titleKey: "bodyScan10MinTitle", descriptionKey: "bodyScan10MinDesc", src: "audio/body_scan_10min.mp3" },
-                { id: "audio-listening-sounds-3min", titleKey: "listeningSounds3MinTitle", descriptionKey: "listeningSounds3MinDesc", src: "audio/mindful_listening_sounds_3min.mp3" }
+                { id: "audio-body-scan-10min", titleKey: "bodyScan10MinTitle", descriptionKey: "bodyScan10Desc", src: "audio/body_scan_10min.mp3" },
+                { id: "audio-listening-sounds-3min", titleKey: "listeningSounds3MinTitle", descriptionKey: "listeningSounds3MinDesc", src: "audio/mindful_listening_sounds_3min.mp3" },
+                { id: "audio-mindful-movement-5min", titleKey: "mindfulMovement5MinTitle", descriptionKey: "mindfulMovement5MinDesc", src: "audio/mindful_movement_5min.mp3" }
             ]
         },
         {
             categoryKey: "thoughtsFeelingsCategory",
             tracks: [
                 { id: "audio-thoughts-clouds-5min", titleKey: "thoughtsClouds5MinTitle", descriptionKey: "thoughtsClouds5MinDesc", src: "audio/thoughts_as_clouds_5min.mp3" },
-                { id: "audio-stop-practice-2min", titleKey: "stopPractice2MinTitle", descriptionKey: "stopPractice2MinDesc", src: "audio/stop_practice_2min.mp3" }
+                { id: "audio-rain-practice", titleKey: "rainPracticeTitle", descriptionKey: "rainPracticeDesc", src: "audio/rain_practice_reflection_7min.mp3" }
+            ]
+        },
+        {
+            categoryKey: "stressResilienceCategory",
+            tracks: [
+                 { id: "audio-stop-practice-2min", titleKey: "stopPractice2MinTitle", descriptionKey: "stopPractice2MinDesc", src: "audio/stop_practice_2min.mp3" },
+                 { id: "audio-3step-breathing-space", titleKey: "threeStepBreathingSpaceTitle", descriptionKey: "threeStepBreathingSpaceDesc", src: "audio/3step_breathing_space_3min.mp3" }
             ]
         },
         {
@@ -120,55 +122,56 @@ document.addEventListener('DOMContentLoaded', () => {
             ]
         }
     ];
-    
+
     function translatePage() {
-        // Ensure langStrings is defined before using it
         if (typeof langStrings === 'undefined') {
-            console.error("langStrings object is not defined. Make sure language_strings.js is loaded correctly.");
+            console.error("langStrings object is not defined.");
             return;
         }
+        const lang = langStrings[currentLanguage] || langStrings.en; // Fallback to English if currentLanguage strings are missing
+        const fallbackLang = langStrings.en; // Explicit fallback
 
         document.querySelectorAll('[data-lang-key]').forEach(el => {
             const key = el.dataset.langKey;
-            const langObject = langStrings[currentLanguage] || langStrings.en; 
+            let translation = lang[key];
 
-            if (langObject && langObject[key] !== undefined) {
-                if (el.tagName === 'TEXTAREA' && key === 'gratitudePlaceholder') {
-                    el.placeholder = langObject[key];
-                } else {
-                    el.innerHTML = langObject[key];
-                }
-            } else if (langStrings.en[key] !== undefined) { 
-                 if (el.tagName === 'TEXTAREA' && key === 'gratitudePlaceholder') {
-                    el.placeholder = langStrings.en[key];
-                } else {
-                    el.innerHTML = langStrings.en[key];
-                }
+            if (translation === undefined && fallbackLang[key] !== undefined) {
+                translation = fallbackLang[key];
+            } else if (translation === undefined) {
+                console.warn(`Translation key "${key}" not found in current language (${currentLanguage}) or English fallback.`);
+                translation = key; // Show the key itself as a last resort
+            }
+
+            if (el.tagName === 'TEXTAREA' && el.id === 'gratitude-input') {
+                el.placeholder = translation;
+            } else {
+                el.innerHTML = translation;
             }
         });
 
         htmlTag.lang = currentLanguage;
-        pageTitleTag.textContent = langStrings[currentLanguage]?.appTitle || langStrings.en.appTitle;
+        const titleKey = 'appTitle';
+        pageTitleTag.textContent = lang[titleKey] || fallbackLang[titleKey];
         if (appTitleH1) {
-             appTitleH1.textContent = langStrings[currentLanguage]?.appTitle || langStrings.en.appTitle;
+             appTitleH1.textContent = lang[titleKey] || fallbackLang[titleKey];
         }
 
         if (languageToggleBtn) {
-            languageToggleBtn.textContent = currentLanguage === 'en' ? 
-                (langStrings.en.toggleToJapanese || "日本語へ") : 
-                (langStrings.jp.toggleToEnglish || "To English");
+            languageToggleBtn.textContent = currentLanguage === 'en' ?
+                (langStrings.jp?.toggleToJapanese || fallbackLang.toggleToJapanese) :
+                (langStrings.en?.toggleToEnglish || fallbackLang.toggleToEnglish);
         }
-        
+
         const practicesPage = document.getElementById('practices-page');
         if (practicesPage && practicesPage.classList.contains('active')) {
-            renderPractices(true); 
+            renderPractices(true);
         }
-        
+
         const installBtn = document.getElementById('install-app-button');
         if (installBtn) {
-            installBtn.textContent = langStrings[currentLanguage]?.installAppBtn || langStrings.en.installAppBtn;
+            installBtn.textContent = lang.installAppBtn || fallbackLang.installAppBtn;
         }
-        
+
         const activePageContent = document.querySelector('.page-content.active');
         if (activePageContent) {
             activePageContent.querySelectorAll('.practice-controls button').forEach(btn => {
@@ -177,62 +180,69 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (action === 'play') {
                      if (icon.includes("❚❚")) icon = icon.replace("❚❚ ","▶ ");
-                     btn.innerHTML = (icon || '▶ ') + (langStrings[currentLanguage]?.playBtn || langStrings.en.playBtn);
-                } else if (action === 'pause') { 
+                     btn.innerHTML = (icon || '▶ ') + (lang.playBtn || fallbackLang.playBtn);
+                } else if (action === 'pause') {
                      if (icon.includes("▶")) icon = icon.replace("▶ ","❚❚ ");
-                     btn.innerHTML = (icon || '❚❚ ') + (langStrings[currentLanguage]?.pauseBtn || langStrings.en.pauseBtn);
+                     btn.innerHTML = (icon || '❚❚ ') + (lang.pauseBtn || fallbackLang.pauseBtn);
                 } else if (action === 'restart') {
-                    btn.innerHTML = (icon || '↺ ') + (langStrings[currentLanguage]?.restartBtn || langStrings.en.restartBtn);
+                    btn.innerHTML = (icon || '↺ ') + (lang.restartBtn || fallbackLang.restartBtn);
                 }
             });
              if(activePageContent.id === 'student-zone-page') {
                 const gratitudeList = document.getElementById('gratitude-list');
                 if(gratitudeList) {
                     gratitudeList.querySelectorAll('button.general-app-button').forEach(delBtn => {
-                        delBtn.textContent = langStrings[currentLanguage]?.deleteBtnText || langStrings.en.deleteBtnText;
+                        delBtn.textContent = lang.deleteBtnText || fallbackLang.deleteBtnText;
                     });
                 }
                  const addGratitudeButton = document.getElementById('add-gratitude-btn');
                 if(addGratitudeButton) {
-                    addGratitudeButton.textContent = langStrings[currentLanguage]?.addGratitudeBtn || langStrings.en.addGratitudeBtn;
+                    addGratitudeButton.textContent = lang.addGratitudeBtn || fallbackLang.addGratitudeBtn;
                 }
             }
         }
-        if (hamburgerMenuButton) { 
-            hamburgerMenuButton.setAttribute('aria-label', currentLanguage === 'en' ? "Toggle navigation menu" : "ナビゲーションメニューを開閉");
+        if (hamburgerMenuButton) {
+            hamburgerMenuButton.setAttribute('aria-label', lang.navToggleLabel || fallbackLang.navToggleLabel || (currentLanguage === 'en' ? "Toggle navigation menu" : "ナビゲーションメニューを開閉"));
         }
     }
-    
+
     function renderPractices(isTranslationUpdate = false) {
         const container = document.getElementById('practice-list-container');
         if (!container) {
             if (!isTranslationUpdate) console.error("Practice list container not found");
             return;
         }
-         if (typeof langStrings === 'undefined') {
+        if (typeof langStrings === 'undefined') {
             console.error("langStrings not available for renderPractices");
             return;
         }
+        const lang = langStrings[currentLanguage] || langStrings.en;
+        const fallbackLang = langStrings.en;
         let html = '';
+
         practiceData.forEach(category => {
-            const categoryTitle = langStrings[currentLanguage]?.[category.categoryKey] || langStrings.en[category.categoryKey];
+            const categoryTitle = lang[category.categoryKey] || fallbackLang[category.categoryKey];
             html += `<div class="practice-category"><h3>${categoryTitle}</h3><ul class="practice-list">`;
             category.tracks.forEach(track => {
-                const trackTitle = langStrings[currentLanguage]?.[track.titleKey] || langStrings.en[track.titleKey];
-                const trackDescription = langStrings[currentLanguage]?.[track.descriptionKey] || langStrings.en[track.descriptionKey];
+                const trackTitle = lang[track.titleKey] || fallbackLang[track.titleKey];
+                const trackDescription = lang[track.descriptionKey] || fallbackLang[track.descriptionKey];
                 html += `
                     <li id="li-${track.id}">
                         <h3>${trackTitle}</h3>
                         <p class="practice-description">${trackDescription}</p>
-                        <audio id="${track.id}" src="${track.src}" preload="metadata"></audio>
+                        ${track.src ? `<audio id="${track.id}" src="${track.src}" preload="metadata"></audio>` : ''}
                         <div class="practice-controls">
-                            <button data-action="play" class="general-app-button" onclick="window.handleAudioControl('${track.id}', this)">${langStrings[currentLanguage]?.playBtn || langStrings.en.playBtn}</button>
-                            <button data-action="restart" class="general-app-button restart-button" onclick="window.handleAudioControl('${track.id}', this)">${langStrings[currentLanguage]?.restartBtn || langStrings.en.restartBtn}</button>
+                            ${track.src ? `
+                            <button data-action="play" class="general-app-button" onclick="window.handleAudioControl('${track.id}', this)">${lang.playBtn || fallbackLang.playBtn}</button>
+                            <button data-action="restart" class="general-app-button restart-button" onclick="window.handleAudioControl('${track.id}', this)">${lang.restartBtn || fallbackLang.restartBtn}</button>
+                            ` : `<p><em>${lang.guidedByInstructorText || fallbackLang.guidedByInstructorText || 'Guided by instructor or self-reflection.'}</em></p>`}
                         </div>
+                        ${track.src ? `
                         <div class="progress-bar-container" onclick="window.seekAudio(event, '${track.id}')">
                             <div class="progress-bar" id="progress-${track.id}"></div>
                         </div>
                         <div class="time-display" id="time-${track.id}">0:00 / 0:00</div>
+                        ` : ''}
                     </li>
                 `;
             });
@@ -240,16 +250,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         container.innerHTML = html;
         document.querySelectorAll('#practices-page audio').forEach(audioEl => {
-            audioEl.onloadedmetadata = null; 
+            audioEl.onloadedmetadata = null;
             audioEl.addEventListener('loadedmetadata', () => updateInitialTimeDisplay(audioEl), {once: true});
             if (audioEl.readyState >= 1 && audioEl.duration && !isNaN(audioEl.duration)) {
                 updateInitialTimeDisplay(audioEl);
             }
         });
     }
-    
+
     function setupFaqToggle() {
-        const faqItems = document.querySelectorAll('.faq-section .faq-item'); 
+        const faqItems = document.querySelectorAll('.faq-section .faq-item');
         faqItems.forEach(item => {
             const questionEl = item.querySelector('.faq-question');
             const answerEl = item.querySelector('.faq-answer');
@@ -257,12 +267,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 answerEl.style.display = "none";
                 item.classList.remove('open');
 
-                const newQuestionEl = questionEl.cloneNode(true); 
+                const newQuestionEl = questionEl.cloneNode(true);
                 questionEl.parentNode.replaceChild(newQuestionEl, questionEl);
 
                 newQuestionEl.addEventListener('click', () => {
                     const isCurrentlyOpen = item.classList.contains('open');
-                    
                     faqItems.forEach(otherItem => {
                         if (otherItem !== item) {
                             otherItem.classList.remove('open');
@@ -270,7 +279,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             if (otherAnswer) otherAnswer.style.display = "none";
                         }
                     });
-
                     if (isCurrentlyOpen) {
                         item.classList.remove('open');
                         answerEl.style.display = "none";
@@ -289,11 +297,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const gratitudeList = document.getElementById('gratitude-list');
 
         if (!addButton || !gratitudeInput || !gratitudeList) return;
-         if (typeof langStrings === 'undefined') {
+        if (typeof langStrings === 'undefined') {
             console.error("langStrings not available for setupGratitudeJournal");
             return;
         }
-
+        const lang = langStrings[currentLanguage] || langStrings.en;
+        const fallbackLang = langStrings.en;
         let gratitudes = JSON.parse(localStorage.getItem('bpGratitudes')) || [];
 
         function renderGratitudes() {
@@ -303,11 +312,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const textSpan = document.createElement('span');
                 textSpan.textContent = item;
                 li.appendChild(textSpan);
-                
+
                 const deleteBtn = document.createElement('button');
-                deleteBtn.textContent = langStrings[currentLanguage]?.deleteBtnText || langStrings.en.deleteBtnText;
+                deleteBtn.textContent = lang.deleteBtnText || fallbackLang.deleteBtnText;
                 deleteBtn.classList.add('general-app-button');
-                deleteBtn.title = 'Delete this item';
+                deleteBtn.title = lang.deleteBtnTitle || fallbackLang.deleteBtnTitle || (currentLanguage === 'en' ? 'Delete this item' : 'この項目を削除');
                 deleteBtn.onclick = (e) => { e.stopPropagation(); deleteGratitude(index); };
                 li.appendChild(deleteBtn);
                 gratitudeList.appendChild(li);
@@ -330,37 +339,33 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('bpGratitudes', JSON.stringify(gratitudes));
             renderGratitudes();
         }
-        
-        const newAddButton = addButton.cloneNode(true);
+
+        const newAddButton = addButton.cloneNode(true); // Clone to remove old listeners
         addButton.parentNode.replaceChild(newAddButton, addButton);
         newAddButton.addEventListener('click', addGratitude);
-        newAddButton.textContent = langStrings[currentLanguage]?.addGratitudeBtn || langStrings.en.addGratitudeBtn;
-        
+        // Text content for button is set by translatePage via data-lang-key
+
+        if (gratitudeInput) gratitudeInput.placeholder = lang.gratitudePlaceholder || fallbackLang.gratitudePlaceholder;
         renderGratitudes();
     }
-    
-    window.loadPage = (pageName, isLangChange = false) => { 
+
+    window.loadPage = (pageName, isLangChange = false) => {
         clearLargeCountdown();
-        
+
         if (mainNavElement && mainNavElement.classList.contains('nav-open')) {
-            const previouslyActivePageButton = mainNavElement.querySelector('button.active');
-            const previouslyActivePage = previouslyActivePageButton ? previouslyActivePageButton.dataset.page : null;
-             if (!isLangChange || (isLangChange && previouslyActivePage !== pageName)) {
-                mainNavElement.classList.remove('nav-open');
-                if (hamburgerMenuButton) {
-                    const icon = hamburgerMenuButton.querySelector('i');
-                    if (icon) { 
-                        icon.classList.remove('fa-times');
-                        icon.classList.add('fa-bars');
-                    }
-                    hamburgerMenuButton.setAttribute('aria-expanded', 'false');
-                }
-            }
+             mainNavElement.classList.remove('nav-open');
+             if (hamburgerMenuButton) {
+                 const icon = hamburgerMenuButton.querySelector('i');
+                 if (icon) {
+                     icon.classList.remove('fa-times');
+                     icon.classList.add('fa-bars');
+                 }
+                 hamburgerMenuButton.setAttribute('aria-expanded', 'false');
+             }
         }
-        
-        // Ensure 'pages' object is defined
+
         if (typeof pages === 'undefined') {
-            console.error("Pages object is not defined. Make sure page_content.js is loaded correctly before app.js.");
+            console.error("Pages object is not defined.");
             contentArea.innerHTML = `<p>Error: Page content not available.</p>`;
             return;
         }
@@ -370,30 +375,32 @@ document.addEventListener('DOMContentLoaded', () => {
             const previouslyActivePage = previouslyActivePageButton ? previouslyActivePageButton.dataset.page : null;
 
             if (!isLangChange || (isLangChange && previouslyActivePage !== pageName) ) {
-                document.querySelectorAll('audio').forEach(audio => {
-                    audio.pause(); 
-                    audio.currentTime = 0;
-                    const controlContainer = audio.closest('li, div#featured-practice');
-                    if (controlContainer) {
-                        const playButton = controlContainer.querySelector('button[data-action="pause"], button[data-action="play"]');
-                        if (playButton) {
-                            let currentIcon = playButton.innerHTML.match(/^(▶ |❚❚ |↺ )/) ? playButton.innerHTML.match(/^(▶ |❚❚ |↺ )/)[0] : '▶ ';
-                            if (currentIcon.includes("❚❚")) currentIcon = currentIcon.replace("❚❚ ","▶ ");
-                            playButton.innerHTML = currentIcon + (langStrings[currentLanguage]?.playBtn || langStrings.en.playBtn);
-                            playButton.dataset.action = 'play';
-                            playButton.classList.remove('playing');
+                 document.querySelectorAll('audio').forEach(audio => {
+                    if (!audio.paused) {
+                        audio.pause();
+                        audio.currentTime = 0;
+                        const controlContainer = audio.closest('li, div#featured-practice');
+                        if (controlContainer) {
+                            const playButton = controlContainer.querySelector('button[data-action="pause"], button[data-action="play"]');
+                            if (playButton) {
+                                let currentIcon = playButton.innerHTML.match(/^(▶ |❚❚ |↺ )/) ? playButton.innerHTML.match(/^(▶ |❚❚ |↺ )/)[0] : '▶ ';
+                                if (currentIcon.includes("❚❚")) currentIcon = currentIcon.replace("❚❚ ","▶ ");
+                                playButton.innerHTML = currentIcon + (langStrings[currentLanguage]?.playBtn || langStrings.en.playBtn);
+                                playButton.dataset.action = 'play';
+                                playButton.classList.remove('playing');
+                            }
+                            const progressBar = controlContainer.querySelector('.progress-bar');
+                            if (progressBar) progressBar.style.width = '0%';
                         }
-                        const progressBar = controlContainer.querySelector('.progress-bar');
-                        if (progressBar) progressBar.style.width = '0%';
                     }
                     updateInitialTimeDisplay(audio);
                 });
             }
 
-            contentArea.innerHTML = pages[pageName]; 
-            
+            contentArea.innerHTML = pages[pageName];
+
             if (pageName === 'practices') {
-                renderPractices(); 
+                renderPractices();
             } else if (pageName === 'teacherResources' || pageName === 'schoolPathways' || pageName === 'forParents' || pageName === 'researchEvidence') {
                 setupFaqToggle();
             } else if (pageName === 'studentZone') {
@@ -413,12 +420,12 @@ document.addEventListener('DOMContentLoaded', () => {
                      }
                 }
             }
-            
+
             const newPageContent = contentArea.querySelector('.page-content');
             document.querySelectorAll('.page-content.active').forEach(el => el.classList.remove('active'));
             if(newPageContent) newPageContent.classList.add('active');
 
-            if (navButtons && navButtons.length > 0) { 
+            if (navButtons && navButtons.length > 0) {
                 navButtons.forEach(button => {
                     button.classList.remove('active');
                     if (button.dataset.page === pageName) {
@@ -426,14 +433,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
             }
-            translatePage();
+            translatePage(); // This will apply translations to the newly loaded content
         } else {
             contentArea.innerHTML = `<p>Content for '${pageName}' not found.</p>`;
             console.error("Page key not found in pages object:", pageName);
         }
     }
 
-    if (navButtons && navButtons.length > 0) { 
+    if (navButtons && navButtons.length > 0) {
         navButtons.forEach(button => {
             button.addEventListener('click', (event) => {
                 const pageName = event.target.dataset.page;
@@ -441,12 +448,14 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
-    
+
     window.handleAudioControl = (audioId, buttonEl) => {
         const audio = document.getElementById(audioId);
         if (!audio) { console.error("Audio element not found:", audioId); return; }
         if (typeof langStrings === 'undefined') { console.error("langStrings not available for handleAudioControl"); return;}
-        
+        const lang = langStrings[currentLanguage] || langStrings.en;
+        const fallbackLang = langStrings.en;
+
         const action = buttonEl.dataset.action;
         const controlContainer = buttonEl.closest('li') || buttonEl.closest('#featured-practice');
         if (!controlContainer) { console.error("Control container not found for button:", buttonEl); return; }
@@ -457,14 +466,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (action === 'restart') {
             document.querySelectorAll('audio').forEach(otherAudio => {
                 if (otherAudio !== audio && !otherAudio.paused) {
-                    otherAudio.pause(); 
+                    otherAudio.pause();
                     const otherContainer = otherAudio.closest('li, div#featured-practice');
                     if(otherContainer){
                         const otherPlayBtn = otherContainer.querySelector('button[data-action="pause"]');
-                        if (otherPlayBtn) { 
-                            otherPlayBtn.innerHTML = '▶ ' + (langStrings[currentLanguage]?.playBtn || langStrings.en.playBtn);
-                            otherPlayBtn.dataset.action = 'play'; 
-                            otherPlayBtn.classList.remove('playing'); 
+                        if (otherPlayBtn) {
+                            otherPlayBtn.innerHTML = '▶ ' + (lang.playBtn || fallbackLang.playBtn);
+                            otherPlayBtn.dataset.action = 'play';
+                            otherPlayBtn.classList.remove('playing');
                         }
                     }
                     updateProgress(otherAudio.id);
@@ -472,59 +481,59 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             audio.currentTime = 0;
             audio.play();
-            if (playPauseButton) { 
-                playPauseButton.innerHTML = '❚❚ ' + (langStrings[currentLanguage]?.pauseBtn || langStrings.en.pauseBtn);
-                playPauseButton.dataset.action = 'pause'; 
-                playPauseButton.classList.add('playing'); 
+            if (playPauseButton) {
+                playPauseButton.innerHTML = '❚❚ ' + (lang.pauseBtn || fallbackLang.pauseBtn);
+                playPauseButton.dataset.action = 'pause';
+                playPauseButton.classList.add('playing');
             }
             startLargeCountdown(audio);
-        } else if (audio.paused) { 
-            document.querySelectorAll('audio').forEach(otherAudio => { 
+        } else if (audio.paused) {
+            document.querySelectorAll('audio').forEach(otherAudio => {
                 if (otherAudio !== audio && !otherAudio.paused) {
                     otherAudio.pause();
                     const otherContainer = otherAudio.closest('li, div#featured-practice');
                      if(otherContainer){
                         const otherPlayBtn = otherContainer.querySelector('button[data-action="pause"]');
-                        if (otherPlayBtn) { 
-                            otherPlayBtn.innerHTML = '▶ ' + (langStrings[currentLanguage]?.playBtn || langStrings.en.playBtn);
-                            otherPlayBtn.dataset.action = 'play'; 
-                            otherPlayBtn.classList.remove('playing'); 
+                        if (otherPlayBtn) {
+                            otherPlayBtn.innerHTML = '▶ ' + (lang.playBtn || fallbackLang.playBtn);
+                            otherPlayBtn.dataset.action = 'play';
+                            otherPlayBtn.classList.remove('playing');
                         }
                     }
                     updateProgress(otherAudio.id);
                 }
             });
             audio.play();
-            if (playPauseButton) { 
-                playPauseButton.innerHTML = '❚❚ ' + (langStrings[currentLanguage]?.pauseBtn || langStrings.en.pauseBtn);
-                playPauseButton.dataset.action = 'pause'; 
-                playPauseButton.classList.add('playing'); 
+            if (playPauseButton) {
+                playPauseButton.innerHTML = '❚❚ ' + (lang.pauseBtn || fallbackLang.pauseBtn);
+                playPauseButton.dataset.action = 'pause';
+                playPauseButton.classList.add('playing');
             }
             startLargeCountdown(audio);
-        } else { 
+        } else {
             audio.pause();
-            if (playPauseButton) { 
-                playPauseButton.innerHTML = '▶ ' + (langStrings[currentLanguage]?.playBtn || langStrings.en.playBtn);
-                playPauseButton.dataset.action = 'play'; 
-                playPauseButton.classList.remove('playing'); 
+            if (playPauseButton) {
+                playPauseButton.innerHTML = '▶ ' + (lang.playBtn || fallbackLang.playBtn);
+                playPauseButton.dataset.action = 'play';
+                playPauseButton.classList.remove('playing');
             }
         }
 
         audio.ontimeupdate = () => updateProgress(audioId);
         audio.onended = () => {
-            if (playPauseButton) { 
-                playPauseButton.innerHTML = '▶ ' + (langStrings[currentLanguage]?.playBtn || langStrings.en.playBtn);
-                playPauseButton.dataset.action = 'play'; 
-                playPauseButton.classList.remove('playing'); 
+            if (playPauseButton) {
+                playPauseButton.innerHTML = '▶ ' + (lang.playBtn || fallbackLang.playBtn);
+                playPauseButton.dataset.action = 'play';
+                playPauseButton.classList.remove('playing');
             }
             const progressBar = controlContainer.querySelector('.progress-bar');
             if(progressBar) progressBar.style.width = '0%';
-            updateInitialTimeDisplay(audio); 
+            updateInitialTimeDisplay(audio);
             clearLargeCountdown();
         };
-        
+
         if (audio.readyState < 1 || isNaN(audio.duration)) {
-             audio.onloadedmetadata = null; 
+             audio.onloadedmetadata = null;
              audio.addEventListener('loadedmetadata', function onMeta() {
                 updateInitialTimeDisplay(audio);
                 if (!audio.paused) startLargeCountdown(audio);
@@ -534,15 +543,15 @@ document.addEventListener('DOMContentLoaded', () => {
              if (!audio.paused) startLargeCountdown(audio);
         }
     };
-    
+
     function startLargeCountdown(audio) {
         if (!audio || isNaN(audio.duration) || audio.duration === 0) {
             clearLargeCountdown();
             return;
         }
-        clearLargeCountdown(); 
+        clearLargeCountdown();
         if(largeCountdownDisplay) largeCountdownDisplay.style.display = 'block';
-        
+
         function updateTimer() {
             if (!audio || audio.paused || audio.ended || isNaN(audio.duration) || isNaN(audio.currentTime) || audio.duration === 0) {
                 clearLargeCountdown();
@@ -558,7 +567,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateProgress(audioId) {
         const audio = document.getElementById(audioId);
         if (!audio) return;
-        const controlContainer = audio.closest('li') || audio.closest('#featured-practice'); 
+        const controlContainer = audio.closest('li') || audio.closest('#featured-practice');
         if (!controlContainer) return;
 
         const progressBar = controlContainer.querySelector('.progress-bar');
@@ -577,7 +586,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     }
-    
+
     window.seekAudio = (event, audioId) => {
         const audio = document.getElementById(audioId);
         const progressBarContainer = event.currentTarget;
@@ -587,7 +596,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const barWidth = progressBarContainer.offsetWidth;
             const seekTime = (clickX / barWidth) * audio.duration;
             audio.currentTime = seekTime;
-            updateProgress(audioId); 
+            updateProgress(audioId);
             if(!audio.paused) {
                 startLargeCountdown(audio);
             } else {
@@ -601,7 +610,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.navigateToPractice = (audioIdToHighlight) => {
         window.loadPage('practices');
-        setTimeout(() => { 
+        setTimeout(() => {
             const practiceAudioElement = document.getElementById(audioIdToHighlight);
             if (practiceAudioElement) {
                 const practiceItem = practiceAudioElement.closest('li');
@@ -613,30 +622,33 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 console.warn("Could not find practice item for ID:", audioIdToHighlight);
             }
-        }, 250); 
+        }, 250);
     };
 
-    window.addEventListener('beforeinstallprompt', (event) => { 
-        event.preventDefault(); 
+    window.addEventListener('beforeinstallprompt', (event) => {
+        event.preventDefault();
         deferredInstallPrompt = event;
         if(installButtonContainer) showInstallButton();
         console.log('`beforeinstallprompt` event was fired.');
     });
-    function showInstallButton() { 
+
+    function showInstallButton() {
         if(!installButtonContainer) return;
-         if (typeof langStrings === 'undefined') {
+        if (typeof langStrings === 'undefined') {
             console.error("langStrings not available for showInstallButton");
             return;
         }
+        const lang = langStrings[currentLanguage] || langStrings.en;
+        const fallbackLang = langStrings.en;
         const installButton = document.createElement('button');
-        installButton.id = 'install-app-button'; 
+        installButton.id = 'install-app-button';
         installButton.classList.add('general-app-button');
-        installButton.textContent = langStrings[currentLanguage]?.installAppBtn || langStrings.en.installAppBtn;
-        installButtonContainer.innerHTML = ''; 
+        installButton.textContent = lang.installAppBtn || fallbackLang.installAppBtn;
+        installButtonContainer.innerHTML = '';
         installButtonContainer.appendChild(installButton);
-        installButtonContainer.style.display = 'block'; 
-        installButton.addEventListener('click', async () => { 
-            installButtonContainer.style.display = 'none'; 
+        installButtonContainer.style.display = 'block';
+        installButton.addEventListener('click', async () => {
+            installButtonContainer.style.display = 'none';
             if (deferredInstallPrompt) {
                 deferredInstallPrompt.prompt();
                 const { outcome } = await deferredInstallPrompt.userChoice;
@@ -650,50 +662,38 @@ document.addEventListener('DOMContentLoaded', () => {
         deferredInstallPrompt = null;
         console.log('Brain Power MW PWA was installed');
     });
-    if ('serviceWorker' in navigator) { 
+    if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('sw.js')
                 .then(registration => {
                     console.log('ServiceWorker registration successful with scope: ', registration.scope);
                 })
                 .catch(error => {
-                    if (!location.protocol.startsWith('file')) {
+                    if (!location.protocol.startsWith('file')) { // Avoid errors in local file development
                         console.log('ServiceWorker registration failed: ', error);
                     }
                 });
         });
     }
-    
+
     if (languageToggleBtn) {
         languageToggleBtn.addEventListener('click', () => {
             currentLanguage = currentLanguage === 'en' ? 'jp' : 'en';
             localStorage.setItem('brainPowerMWLang', currentLanguage);
-            
-            if (mainNavElement && mainNavElement.classList.contains('nav-open')) {
-                mainNavElement.classList.remove('nav-open');
-                if (hamburgerMenuButton) {
-                    const icon = hamburgerMenuButton.querySelector('i');
-                    if (icon) {
-                        icon.classList.remove('fa-times');
-                        icon.classList.add('fa-bars');
-                    }
-                    hamburgerMenuButton.setAttribute('aria-expanded', 'false');
-                }
-            }
             const currentPageButton = mainNavElement ? mainNavElement.querySelector('button.active') : null;
             if (currentPageButton) {
-                window.loadPage(currentPageButton.dataset.page, true); 
+                window.loadPage(currentPageButton.dataset.page, true); // Pass true for isLangChange
             } else {
-                window.loadPage('home', true); 
+                window.loadPage('home', true); // Default to home on language change if no active page
             }
         });
     }
-    
-    // Initial Page Load - Ensure global data objects are loaded from other files before this.
+
+    // Initial Page Load
     if (typeof pages !== 'undefined' && typeof langStrings !== 'undefined') {
-        window.loadPage('home'); 
+        window.loadPage('home'); // Load home page initially
     } else {
         console.error("Critical data (pages or langStrings) not loaded. Check script loading order in index.html.");
-        contentArea.innerHTML = "<p>Error initializing application. Please ensure all scripts are loaded correctly.</p>";
+        contentArea.innerHTML = "<p>Error initializing application. Please check console.</p>";
     }
 });
